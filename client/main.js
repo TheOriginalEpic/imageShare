@@ -2,21 +2,46 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import './main.html';
+import '../lib/collections.js';
 
-Template.hello.onCreated(function helloOnCreated() {
-  // counter starts at 0
-  this.counter = new ReactiveVar(0);
+Template.mainBody.helpers({
+  	bodyAll() {
+  		return imageDB.findOne({});
+    	// return imageDB.find({}, {sort:{upvote: -1}});
+  	},
 });
 
-Template.hello.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
+// Template.mainBody.events({
+
+// });
+
+Template.myJumbo.events({
+	'click .js-addImg'(event, instance) {
+		$('#imgAdd').modal('show');
+	},
 });
 
-Template.hello.events({
-  'click button'(event, instance) {
-    // increment the counter when button is clicked
-    instance.counter.set(instance.counter.get() + 1);
-  },
+Template.addImg.events({
+	'click .js-save'(event, instance) {
+		var Image = $('#Image').val();
+		var Title = $('#Title').val();
+		var imgDesc = $('#Description').val();
+
+		if (Image == ""){
+			Image = "noImage.png";
+		}
+
+		imageDB.insert({'title':Title, 'img':Image, 'desc':imgDesc});
+
+		$('#Image').val('');
+		$('#Title').val('');
+		$('#Description').val('');
+
+		$('#imgAdd').modal('hide');
+	},
+
+	'change #Image'(event, instance) {
+		var Image = $('#Image').val();
+		$('#imgPreview').attr('src', Image);
+	},
 });

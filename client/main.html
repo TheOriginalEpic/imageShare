@@ -1,25 +1,163 @@
 <head>
-  <title>imageShare</title>
+	<title>Image Share</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+	<div class="container">
+		{{> navBar}}
 
-  {{> hello}}
-  {{> info}}
+		{{> addImg}}
+
+		<main role="main">
+			{{> myJumbo}}      
+			<div class="album py-5 bg-light">
+				<div class="container">
+					{{> mainBody}}
+				</div>
+			</div>
+		</main>
+
+		{{> footerBar}}    
+	</div>
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="navBar">
+	<header>
+		<div class="collapse bg-dark" id="navbarHeader">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-8 col-md-7 py-4">
+						<h4 class="text-white">About</h4>
+						<p class="text-muted">literalMe is your go to place for book reviews and ratings of new and upcoming books as well as the classics.</p>
+					</div>
+					<div class="col-sm-4 offset-md-1 py-4">
+						<h4 class="text-white">You can...</h4>
+						<ul class="list-unstyled">
+							<li><a href="#" class="text-white">Follow on Twitter</a></li>
+							<li><a href="#" class="text-white">Like on Facebook</a></li>
+							<li><a href="#" class="text-white">Email us</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="navbar navbar-dark bg-dark shadow-sm">
+			<div class="container d-flex justify-content-between">
+				<a href="#" class="navbar-brand d-flex align-items-center">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+					<strong>Album</strong>
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+		</div>
+	</header>
 </template>
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+<template name="myJumbo">
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">Image Share</h1>
+			<p class="lead text-muted">Glad you found your way here. It's always a good time to read a book. Find your passion amongst the stars by choosing from our many categories tailored just for you.</p>
+			<p>
+				<!-- <a href="#" class="btn btn-dark text-light my-2">Top Rated Book</a> -->
+				<a class="btn btn-dark text-light my-2 js-addImg">Add New Image</a>
+			</p>
+		</div>
+	</section>
+</template>
+
+<template name="mainBody">
+  {{#each bodyAll}}  
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card mb-4 shadow-sm">
+							<img src="{{img}}" alt="temp photo">
+							<div class="card-body">
+								<h5>{{title}}</h5>
+								<p class="card-text">{{desc}}</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary js-view">View</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary js-edit">Edit</button>
+									</div>
+									<small class="text-muted">9 mins</small>
+								</div>
+							</div>
+						</div>
+					</div> <!-- /col -->
+				</div> <!-- /row for all cards -->
+	{{/each}}
+</template>
+
+<template name="addImg">
+	<!-- Modal -->
+	<div class="modal fade" id="imgAdd" tabindex="-1" role="dialog" aria-labelledby="imgAddLablel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="imgAddTitle">Add Image</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>						
+						
+						<img id="imgPreview" src="" alt="">
+						
+						<!-- <label class="sr-only" for="Title">Insert Image</label> -->
+						<div class="input-group mb-2 mr-sm-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">Insert Image</div>
+							</div>
+							<input type="text" class="form-control" id="Image" placeholder="">
+						</div>
+
+						<!-- <div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="insertImg">Upload</span>
+							</div>
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="insertImg" aria-describedby="inputGroupFileAddon01">
+								<label class="custom-file-label" for="insertImg">Choose file</label>
+							</div>
+						</div> -->
+
+						<!-- <label class="sr-only" for="Title">Title</label> -->
+						<div class="input-group mb-2 mr-sm-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">Title</div>
+							</div>
+							<input type="text" class="form-control" id="Title" placeholder="Falling Star">
+						</div>
+
+						<!-- <label class="sr-only" for="Description">Image Description</label> -->
+						<div class="input-group mb-2 mr-sm-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">Image Description</div>
+							</div>
+							<textarea type="text" class="form-control" id="Description" placeholder="Description"></textarea>
+						</div>					
+				</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary js-save">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="footerBar">
+	<footer class="text-muted">
+		<div class="container">
+			<p class="float-right">
+				<a href="#">Back to top</a>
+			</p>
+			<p>&copy; WeTookYourDesignsInc</p>      
+		</div>
+	</footer>
 </template>
