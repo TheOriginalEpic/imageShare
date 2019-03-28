@@ -137,7 +137,7 @@ Template.editImg.events({
 
 		imageDB.update({_id: Save}, {$set:{'title':Title, 'img':Image, 'desc':imgDesc}});
 
-		$('#editImg').modal('show');
+		$('#imgEdit').modal('hide');
 	},
 
 	'click .js-cancel'(event, instance){
@@ -148,6 +148,6 @@ Template.editImg.events({
 		$('#Description').val('');
 		$('#imgPreview').attr('src', Image);
 
-		$('#editImg').modal('hide');
+		$('#imgEdit').modal('hide');
 	},
 });
