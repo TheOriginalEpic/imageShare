@@ -3,6 +3,16 @@ body {
   font-family: sans-serif;
 }
 
-#imgPreview {
-	width: 250px;
+img {
+	width: 100%;
+}
+
+#imgPreview, #eImgPreview {
+	display: block;
+	margin: 0 auto 1em auto;
+	width: 40%;
+}
+
+.elapsed-time {
+	padding-right: 0.5em;
 }
