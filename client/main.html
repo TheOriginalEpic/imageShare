@@ -77,6 +77,9 @@
 		<div id="{{_id}}" class="col-md-4">
 			<div class="card mb-4 shadow-sm">
 				<img src="{{img}}" alt="temp photo">
+
+				{{> starsRating class="js-rate" data_id=_id rating=rating size='lg' mutable=true}}
+
 				<div class="card-body">
 					<h5>{{title}}</h5>
 					<p class="card-text">{{desc}}</p>
@@ -89,7 +92,7 @@
 					</div>
 				</div>
 
-				<div class="row justify-content-center">
+				<!-- <div class="row justify-content-center">
 					<div class="col-auto text-center">
 						<i class="zmdi zmdi-thumb-up js-upvote"><p class="upvote">{{upvote}}</p></i>					
 					</div>
@@ -97,7 +100,7 @@
 					<div class="col-auto text-center">
 						<i class="zmdi zmdi-thumb-down js-downvote"><p class="downvote">{{downvote}}</p></i>					
 					</div>
-				</div>
+				</div> -->
 				
 				<div class="d-flex justify-content-end elapsed-time">
 					<small class="text-muted text-center">{{createdOn}}</small>
@@ -107,7 +110,7 @@
 	{{/each}}
 
 	<div class="col-12 text-center">
-		<h3>{{imagesFound}} images in gallery</h3> 
+		<h3>{{imagesFound}} images found in the gallery</h3> 
 	</div>
 </template>
 

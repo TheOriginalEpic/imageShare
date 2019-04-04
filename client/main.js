@@ -6,7 +6,7 @@ import '../lib/collections.js';
 
 Template.mainBody.helpers({
   	bodyAll() {
-    	return imageDB.find({}, {sort:{upvote: -1}});
+    	return imageDB.find({}, {sort:{rating: -1, createdOn: -1}});
   	},
 
   	imagesFound(){
@@ -15,33 +15,33 @@ Template.mainBody.helpers({
 });
 
 Template.mainBody.events({
-	'click .js-upvote'(event, instance) {
-		var mainBodyID = this._id;
-		var upvotes = imageDB.findOne({_id: mainBodyID}).upvote;
+	// 'click .js-upvote'(event, instance) {
+	// 	var mainBodyID = this._id;
+	// 	var upvotes = imageDB.findOne({_id: mainBodyID}).upvote;
 
-		//console.log(mainBodyID);            
+	// 	//console.log(mainBodyID);            
 
-		if (!upvotes){
-			upvotes = 0;
-		}    
+	// 	if (!upvotes){
+	// 		upvotes = 0;
+	// 	}    
 
-		upvotes++;
+	// 	upvotes++;
 
-		imageDB.update({_id: mainBodyID}, {$set:{'upvote':upvotes}});
-	},
+	// 	imageDB.update({_id: mainBodyID}, {$set:{'upvote':upvotes}});
+	// },
 
-	'click .js-downvote'(event, instance) {
-		var mainBodyID = this._id;
-		var downvotes = imageDB.findOne({_id: mainBodyID}).downvote;                  
+	// 'click .js-downvote'(event, instance) {
+	// 	var mainBodyID = this._id;
+	// 	var downvotes = imageDB.findOne({_id: mainBodyID}).downvote;                  
 
-		if (!downvotes){
-			downvotes = 0;
-		}    
+	// 	if (!downvotes){
+	// 		downvotes = 0;
+	// 	}    
 
-		downvotes++;
+	// 	downvotes++;
 
-		imageDB.update({_id: mainBodyID}, {$set:{'downvote':downvotes}});
-	},
+	// 	imageDB.update({_id: mainBodyID}, {$set:{'downvote':downvotes}});
+	// },
 
 	'click .js-view'(event, instance) {
 		var viewID = this._id;
@@ -78,6 +78,13 @@ Template.mainBody.events({
 				imageDB.remove({_id:deleteID});
 			});			
 		}		
+	},
+
+	'click .js-rate'(event, instance){
+		var rateID = this.data_id;
+		var Rating = $(event.currentTarget).data('userrating');
+
+		imageDB.update({_id:rateID}, {$set:{'rating': Rating}});
 	},
 });
 
