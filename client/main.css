@@ -16,3 +16,7 @@ img {
 .elapsed-time {
 	padding-right: 0.5em;
 }
+
+.time {
+	margin: 0 auto 0 auto;
+}

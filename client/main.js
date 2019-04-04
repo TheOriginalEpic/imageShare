@@ -6,7 +6,33 @@ import '../lib/collections.js';
 
 Template.mainBody.helpers({
   	bodyAll() {
-    	return imageDB.find({}, {sort:{rating: -1, createdOn: -1}});
+  		var time = new Date() - 15000;
+  		var results = imageDB.find({'createdOn': {$gte:time}}).count();
+  		if (results > 0){
+  			return imageDB.find({}, {sort:{createdOn: -1, rating: -1}});
+  		} else {
+    		return imageDB.find({}, {sort:{rating: -1, createdOn: 1}});
+    	}   	
+  	},
+
+  	imageAge(){
+  		var imgCreatedOn = imageDB.findOne({_id:this._id}).createdOn;
+  		imgCreatedOn = Math.round((new Date() - imgCreatedOn) / 60000);
+
+  		var unit = " mins";
+
+  		if (imgCreatedOn > 60){
+  			imgCreatedOn = Math.round(imgCreatedOn / 60);
+  			unit = " hours";
+  		}
+
+  		if (imgCreatedOn > 1440){
+  			imgCreatedOn = Math.round(imgCreatedOn / 1440);
+  			unit = " days";
+
+  		}
+
+  		return imgCreatedOn + unit;
   	},
 
   	imagesFound(){
@@ -104,7 +130,7 @@ Template.addImg.events({
 			Image = "noImage.png";
 		}
 
-		imageDB.insert({'title':Title, 'img':Image, 'desc':imgDesc, 'createdOn':Date()});
+		imageDB.insert({'title':Title, 'img':Image, 'desc':imgDesc, 'createdOn':new Date().getTime()});
 
 		$('#Image').val('');
 		$('#Title').val('');
@@ -142,7 +168,7 @@ Template.editImg.events({
 		$('#eDescription').val('');
 		$('#eImgPreview').attr('scr', Image);
 
-		imageDB.update({_id: Save}, {$set:{'title':Title, 'img':Image, 'desc':imgDesc}});
+		imageDB.update({_id: Save}, {$set:{'title':Title, 'img':Image, 'desc':imgDesc, 'createdOn':new Date().getTime()}});
 
 		$('#imgEdit').modal('hide');
 	},
