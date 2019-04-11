@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Session } from 'meteor/session';
+import { Accounts } from 'meteor/accounts-base';
 
 import './main.html';
 import '../lib/collections.js';
@@ -22,7 +23,9 @@ $(window).scroll(function(event){
 });
 
 Accounts.ui.config({
-	
+
+  passwordSignupFields: 'USERNAME_ONLY',
+
 });
 
 Template.mainBody.helpers({
@@ -58,6 +61,14 @@ Template.mainBody.helpers({
 
   	imagesFound(){
   		return imageDB.find().count();
+  	},
+
+  	userLoggedIn(){
+  		if (Meteor.user()){
+  			return true;
+  		} else {
+  			return false
+  		}
   	},
 });
 
