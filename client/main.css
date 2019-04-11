@@ -7,16 +7,25 @@ img {
 	width: 100%;
 }
 
-#imgPreview, #eImgPreview {
-	display: block;
-	margin: 0 auto 1em auto;
-	width: 40%;
-}
-
 .elapsed-time {
 	padding-right: 0.5em;
 }
 
 .time {
 	margin: 0 auto 0 auto;
+}
+
+.login-link-text {
+	color: white !important;
+}
+
+#imgPreview, #eImgPreview {
+	display: block;
+	margin: 0 auto 1em auto;
+	width: 40%;
+}
+
+#login-buttons {
+	margin-left: auto;
+	margin-right: 1em;
 }

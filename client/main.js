@@ -1,17 +1,38 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Session } from 'meteor/session';
 
 import './main.html';
 import '../lib/collections.js';
+
+Session.set('imgLimit', 3);
+
+lastScrollTop = 0;
+$(window).scroll(function(event){
+
+	if ($(window).scrollTop() + $(window).height() > $(document).height() - 100){
+		var scrollTop = $(this).scrollTop();
+
+		if (scrollTop > lastScrollTop){
+			Session.set('imgLimit', Session.get('imgLimit') + 3);			
+		}
+
+		lastScrollTop = scrollTop;
+	}
+});
+
+Accounts.ui.config({
+	
+});
 
 Template.mainBody.helpers({
   	bodyAll() {
   		var time = new Date() - 15000;
   		var results = imageDB.find({'createdOn': {$gte:time}}).count();
   		if (results > 0){
-  			return imageDB.find({}, {sort:{createdOn: -1, rating: -1}});
+  			return imageDB.find({}, {sort:{createdOn: -1, rating: -1}, limit:Session.get('imgLimit')});
   		} else {
-    		return imageDB.find({}, {sort:{rating: -1, createdOn: 1}});
+    		return imageDB.find({}, {sort:{rating: -1, createdOn: 1}, limit:Session.get('imgLimit')});
     	}   	
   	},
 
