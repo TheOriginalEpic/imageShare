@@ -7,6 +7,7 @@ import './main.html';
 import '../lib/collections.js';
 
 Session.set('imgLimit', 3);
+Session.set('userFilter', false);
 
 lastScrollTop = 0;
 $(window).scroll(function(event){
@@ -30,13 +31,17 @@ Accounts.ui.config({
 
 Template.mainBody.helpers({
   	bodyAll() {
-  		var time = new Date() - 15000;
-  		var results = imageDB.find({'createdOn': {$gte:time}}).count();
-  		if (results > 0){
-  			return imageDB.find({}, {sort:{createdOn: -1, rating: -1}, limit:Session.get('imgLimit')});
-  		} else {
-    		return imageDB.find({}, {sort:{rating: -1, createdOn: 1}, limit:Session.get('imgLimit')});
-    	}   	
+  		if (Session.get("userFilter") == false){
+	  		var time = new Date() - 15000;
+	  		var results = imageDB.find({'createdOn': {$gte:time}}).count();
+	  		if (results > 0){
+	  			return imageDB.find({}, {sort:{createdOn: -1, rating: -1}, limit:Session.get('imgLimit')});
+	  		} else {
+	    		return imageDB.find({}, {sort:{rating: -1, createdOn: 1}, limit:Session.get('imgLimit')});
+	    	} 
+    	} else {
+    		return imageDB.find({postedBy:Session.get("userFilter")}, {sort:{rating: -1, createdOn: 1}, limit:Session.get('imgLimit')});
+    	}  	
   	},
 
   	imageAge(){
@@ -64,42 +69,24 @@ Template.mainBody.helpers({
   	},
 
   	userLoggedIn(){
-  		if (Meteor.user()){
-  			return true;
-  		} else {
-  			return false
-  		}
+  		var logged = imageDB.findOne({_id:this._id}).postedBy;
+  		return Meteor.users.findOne({_id:logged}).username;
+  	},
+
+  	userId(){
+  		return imageDB.findOne({_id:this._id}).postedBy;
   	},
 });
 
 Template.mainBody.events({
-	// 'click .js-upvote'(event, instance) {
-	// 	var mainBodyID = this._id;
-	// 	var upvotes = imageDB.findOne({_id: mainBodyID}).upvote;
+	'click .usrClick'(event, instance){
+		event.preventDefault();
+		Session.set("userFilter", event.currentTarget.id);
+	},
 
-	// 	//console.log(mainBodyID);            
-
-	// 	if (!upvotes){
-	// 		upvotes = 0;
-	// 	}    
-
-	// 	upvotes++;
-
-	// 	imageDB.update({_id: mainBodyID}, {$set:{'upvote':upvotes}});
-	// },
-
-	// 'click .js-downvote'(event, instance) {
-	// 	var mainBodyID = this._id;
-	// 	var downvotes = imageDB.findOne({_id: mainBodyID}).downvote;                  
-
-	// 	if (!downvotes){
-	// 		downvotes = 0;
-	// 	}    
-
-	// 	downvotes++;
-
-	// 	imageDB.update({_id: mainBodyID}, {$set:{'downvote':downvotes}});
-	// },
+	'click js-clearFilter'(event, instance){
+		Session.set("userFilter", false);
+	}
 
 	'click .js-view'(event, instance) {
 		var viewID = this._id;
@@ -162,7 +149,7 @@ Template.addImg.events({
 			Image = "noImage.png";
 		}
 
-		imageDB.insert({'title':Title, 'img':Image, 'desc':imgDesc, 'createdOn':new Date().getTime()});
+		imageDB.insert({'title':Title, 'img':Image, 'desc':imgDesc, 'createdOn':new Date().getTime(), 'postedBy':Meteor.user()._id});
 
 		$('#Image').val('');
 		$('#Title').val('');
